@@ -68,18 +68,19 @@ class Book extends CI_Controller {
 	{
 		$this->load->model('Book_model');
 		$bookList = $this->Book_model->loadList();
-		header("Content-Type: text/xml");
-		$sxe = new SimpleXMLElement('<books/>');
+		header("Content-Type: text/xml; charset=utf-8");
+		$xml = '<?xml version="1.0" encoding="UTF-8"?><books>';
 		foreach($bookList as $book) {
 			$id = $book->id;
 			$name = $book->book_name;
 			$author = $book->author_name;
-
-			$book = $sxe->addChild('book');
-			$book->addChild('id', $id);
-			$book->addChild('name', $name);
-			$book->addChild('author', $author);
+			$xml .= '<book>'.
+					'<id>' . $id . '</id>' .
+					'<name>' . $name . '</name>' . 
+					'<author>' . $author . '</author>' .
+				'</book>';
 		}
-		echo $sxe->asXML();
+		$xml .= '</books>';
+		echo $xml;
 	}
 }
